@@ -1,0 +1,6 @@
+__pycache__/
+.cache/
+dist/
+# build.py copies these into the unpacked extension.
+extension/poketr.js
+extension/dictionary.json

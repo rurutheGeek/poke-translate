@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      # The core tests run through node; without it they would be skipped.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Syntax check
+        run: |
+          python3 -m py_compile build.py dictionary.py
+          for file in core/*.js extension/*.js; do node --check "$file"; done
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Build from PokéAPI
+        run: python3 build.py --release "$(jq -r .version extension/manifest.json)"

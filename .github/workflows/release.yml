@@ -1,0 +1,40 @@
+name: Release
+
+# Push a tag that matches extension/manifest.json (for example v1.0.0).
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests
+      - name: Build release archives
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          python3 build.py --release "$version"
+          cd dist
+          sha256sum "poke-translate-site-v$version.tar.gz" \
+            "poke-translate-extension-v$version.zip" > SHA256SUMS
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          notes=$(awk -v v="$version" '$0 ~ "^## \\[?"v {p=1; next} /^## / && p {exit} p' CHANGELOG.md)
+          gh release create "$GITHUB_REF_NAME" --title "v$version" --notes "$notes" \
+            "dist/poke-translate-site-v$version.tar.gz" \
+            "dist/poke-translate-extension-v$version.zip" \
+            dist/SHA256SUMS
