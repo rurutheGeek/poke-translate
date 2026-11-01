@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 - 2026-11-01
+
+- Renamed to Poke Translater.
+
 ## 1.1.0 - 2026-11-01
 
 - Renamed to ポケモントランスレーター (site title, heading and extension name).
