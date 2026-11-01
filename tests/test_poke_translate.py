@@ -178,6 +178,7 @@ class BuildTests(unittest.TestCase):
             shutil.copy(STACK / 'core/poketr.js', root / 'core/poketr.js')
             (root / 'site').mkdir()
             shutil.copy(STACK / 'site/index.html', root / 'site/index.html')
+            shutil.copy(STACK / 'site/favicon.svg', root / 'site/favicon.svg')
             cache = root / '.cache/pokeapi.json'
             cache.parent.mkdir()
             cache.write_text(json.dumps({'source': 'test', 'entries': dictionary.parse_csvs(TABLES)}),
@@ -201,7 +202,7 @@ class BuildTests(unittest.TestCase):
                                      set(archive.namelist()))
             with tarfile.open(root / f'dist/poke-translate-site-v{version}.tar.gz') as archive:
                 self.assertEqual(sorted(archive.getnames()),
-                                 ['dictionary.json', 'index.html', 'poke-translate-extension.zip', 'poketr.js'])
+                                 ['dictionary.json', 'favicon.svg', 'index.html', 'poke-translate-extension.zip', 'poketr.js'])
             built = json.loads((site / 'dictionary.json').read_text(encoding='utf-8'))
             self.assertIn('ガブ', built['entries']['species:445']['ja'])
 

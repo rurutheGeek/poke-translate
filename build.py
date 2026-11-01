@@ -88,6 +88,7 @@ def build(refresh=False, ref=POKEAPI_REF, release=None):
     site = DIST / 'site'
     changed += [write(site / name, data)
                 for name, data in [('index.html', (ROOT / 'site/index.html').read_bytes()),
+                                   ('favicon.svg', (ROOT / 'site/favicon.svg').read_bytes()),
                                    ('poketr.js', core), ('dictionary.json', built)]]
     # Phones load the extension from a zip, so the site hands out the same files.
     changed.append(write(site / ZIP_NAME, extension_zip()))
