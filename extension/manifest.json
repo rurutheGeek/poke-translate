@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "ポケモントランスレーター",
-  "version": "1.1.0",
+  "name": "Poke Translater",
+  "version": "1.1.1",
   "description": "ポケモン用語を公式名に固定して、見ているページを対訳表示する。",
   "permissions": [
     "activeTab",
